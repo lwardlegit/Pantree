@@ -1,0 +1,23 @@
+.mContainer{
+    width: 20%;
+    height: 40em;
+    margin: 0 auto;
+    margin-top: 12em;
+    display: block;
+}
+.mheader{
+    display: inline-flex;
+    margin-top: 1em;
+    width: 100%;
+    justify-content: center;
+    background-color: indianred;
+}
+.mToggle{
+    margin-left:1em;
+}
+.mBody{
+    display: block;
+} 
+.mFooter{
+    display: flex;
+}

@@ -1,0 +1,215 @@
+.app{
+  margin: 0 auto;
+  width: 80%;
+  justify-content: center;
+  display: block;
+  font-family: 'Roboto', sans-serif;
+}
+
+.links{
+  color:black;
+  padding-left: 4em;
+  padding-top: 2em;
+  padding-right: 1em;
+  text-decoration: none;
+}
+.links:hover{
+  text-decoration: none;
+  color: green;
+}
+.header{
+  display: flex;
+  justify-content: center;
+  width: 60%;
+  margin-left: 10em;
+  z-index: 2;
+  position: fixed;
+  padding-bottom: 3em;
+  padding-top: 1em;
+  background-color: white;
+ 
+}
+.nav{
+display: flex;
+padding-left: 2em;
+}
+.intro{
+  display: flex;
+  margin: 0 auto;
+  margin-top: 2em;
+  width: 50%;
+  justify-content: center;
+}
+.introBtn{
+  border-radius: 5px;
+  padding:.5em;
+}
+.googleSignin{
+  margin: 0 auto;
+  margin-top:1em;
+  display: flex;
+  justify-content: center;
+}
+.sheetSelector{
+  overflow-x: auto;
+  display: flex;
+  justify-content: space-evenly;
+  width: 90%;
+  height: 5em;
+}
+.introBtn:hover{
+  background-color: black;
+  color:white;
+  padding:.75em;
+
+}
+.ribbon{
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  margin-top: 2em;
+  padding-top: 2em;
+  justify-content: center;
+}
+.ribbonItem{
+  font-size: large;
+  margin:.5em;
+  width: 100%;
+  height: 6em;
+  padding-top: 4em;
+  padding-bottom: 8em;
+}
+
+.ribbonIcons{
+  margin-left: 3.5em;
+  width: 100px;
+  height: 100px;
+}
+.body{
+  padding-top: 10em;
+  margin: 0 auto;
+  width: 50%;
+}
+.boxContent{
+  margin-top: 3em;
+}
+.how{
+  margin-top: 6em;
+  line-height: 1.8em;
+}
+.contactUs{
+  margin-top: 6em;
+}
+
+.creator{
+  margin-top: 5em;
+  padding-bottom: 1em;
+  display: block;
+  justify-content: space-evenly;
+}
+
+.about{
+  display: flex;
+  justify-content: left;
+  width: 90%;
+  margin-top: 5em;
+  word-wrap: wrap;
+  line-height: 1.8em;
+}
+.me{
+  margin-top: 2em;
+  padding-left:2em;
+}
+.personalContact{
+  display: flex;
+  justify-content: left;
+  margin:1em;
+}
+.githubBtn{
+  border-radius: 5px;
+  margin-right: 1.5em;
+  width: 30%;
+}
+
+.myEmail{
+  padding-top:.2em
+}
+
+.footer{
+  padding-top: 1em;
+  width:100%;
+  height: 4em;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+/* APP SECTION */
+
+.mContainer{
+  width: 20em;
+  height: 80%;
+  margin: 0 auto;
+  margin-top: 12em;
+  background-color: white;
+  border: solid 1px black;
+  text-align: center;
+}
+
+.mheader{
+  display: flex;
+  margin: 0 auto;
+  width: 90%;
+  justify-content: center;
+  background-color: indianred;
+}
+.mToggle{
+  margin-left:1em;
+}
+.mMode{
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 1em;
+}
+.mMode h5:hover{
+  text-shadow: 2px 2px gray;
+  cursor: pointer;
+}
+.mBody{
+  margin-top:1em;
+  padding:1em;
+  height: 30em;
+  overflow-y: auto;
+  display: block;
+} 
+.mFooter{
+  height: 3em;
+  margin: 0 auto;
+  padding-top: .5em;
+}
+.mStoreItem{
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  background-color: white;
+  border: solid 1px black;
+}
+
+.fresh{
+background-color: green;
+}
+.old{
+background-color: yellow;
+}
+.expired{
+  background-color: red;
+}
+
+.btn-circle {
+  width: 20px;
+  height: 20px;
+  padding: 1px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.62857;
+}
