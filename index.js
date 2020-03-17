@@ -1,11 +1,12 @@
-const fs = require('fs');
-const readline = require('readline');
-var express = require("express")
+var express = require("express");
 const path = require('path');
-const {google} = require('googleapis')
-const request = require('request')
+const creds = require('./client_secret');
 const app = express()
 const port = process.env.PORT || 5000;
+
+const fs = require('fs');
+const readline = require('readline');
+const {google} = require('googleapis');
 
 
 // Serve the static files from the React app
@@ -20,6 +21,7 @@ app.get('/api/getList', (req,res) => {
 
 
 
+
 /* SHEET OPERATIONS */
 app.get('/api/sheetData', (req,res) =>{
     //grab the sheet data using the googlesheetsapi
@@ -29,16 +31,10 @@ app.post('/api/updateSheet', (req,res)=>{
     //send new sheet data to the google sheet
 })
 
-
-
-
-
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
-
-
 app.listen(port,()=>{console.log(`listening on ${port}`)});
 
 
@@ -54,7 +50,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const TOKEN_PATH = 'token.json';
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
+fs.readFile('client_secret.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content), listMajors);
@@ -134,5 +130,3 @@ function listMajors(auth) {
     }
   });
 }
-
-
