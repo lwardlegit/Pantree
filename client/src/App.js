@@ -7,7 +7,6 @@ import squidwardFuture from './squidwardFuture.jpg';
 import Me from './bigme.jpg';
 import Button from 'react-bootstrap/Button';
 import MobileInterface from './Mobile';
-import Modal from 'react-bootstrap/Modal';
 import './App.css';
 
 export default class App extends Component {
@@ -42,44 +41,31 @@ export default class App extends Component {
         category: 'veggie',
         expiration: 'fresh'
       },
-      {
-        name: 'squash',
-        dateEntered: '1/2/2020',
-        category: 'veggie',
-        expiration: 'fresh'
-      },
-      {
-        name: 'squash',
-        dateEntered: '1/2/2020',
-        category: 'veggie',
-        expiration: 'fresh'
-      },
-      {
-        name: 'squash',
-        dateEntered: '1/2/2020',
-        category: 'veggie',
-        expiration: 'old'
-      },
-      {
-        name: 'squash',
-        dateEntered: '1/2/2020',
-        category: 'veggie',
-        expiration: 'fresh'
-      },
+      
     ],
 
     fetchedSheet: null,
-    list: []
+    sheetData: []
   }
 
-  getList = () => {
-    fetch('/api/getList')
-    .then(res => res.json())
-    .then(list => this.setState({ list }))
+  getSheet = () => {
+    fetch('/api/sheetData')
+    .then((response)=>{
+      return response.json();
+    })
+    .then((data)=>{
+      this.setState({stock:data.payload.values})
+      console.log(data)
+      console.log(data.payload.values)
+    })
   }
 
   componentDidMount() {
-    this.getList();
+    this.getSheet();
+  }
+
+  returnHome = () =>{
+    this.setState({sheetSelected:!this.state.sheetSelected})
   }
 
   focusOnDiv=(target)=>{
@@ -106,35 +92,35 @@ export default class App extends Component {
         <header className = 'header'>
           <img src={Logo} width='80px' height='80px' alt='Pantree Logo'></img>
            <nav className='nav'>
-             <a class='links' onClick={()=>{this.focusOnDiv('home')}} href="#home">home</a>
-             <a class='links' onClick={()=>{this.focusOnDiv('how')}} href="#how">How it Works</a>
-             <a class='links' onClick={()=>{this.focusOnDiv('future')}} href="#how">Future Plans</a>
-             <a class='links' onClick={()=>{this.focusOnDiv('contact')}} href="#contact">Contact</a>
+             <a className='links' onClick={()=>{this.focusOnDiv('home')}} href="#home">home</a>
+             <a className='links' onClick={()=>{this.focusOnDiv('how')}} href="#how">How it Works</a>
+             <a className='links' onClick={()=>{this.focusOnDiv('future')}} href="#how">Future Plans</a>
+             <a className='links' onClick={()=>{this.focusOnDiv('contact')}} href="#contact">Contact</a>
            </nav>
         </header>
 
 
         <div className='body'>
-           <h5 class="intro">Try out Pantree here by signing into google</h5>
+           <h5 className="intro">easier than checking your email</h5>
            <div className='googleSignin'>
-               <div onClick={()=>{this.setState({modal: true})}} class="g-signin2" data-onsuccess="onSignIn"></div>
+               <Button onClick={()=>{this.setState({sheetSelected: !this.state.sheetSelected})}}> Launch Demo </Button>
            </div>
 
-          <div class="ribbon" id='home'>
+          <div className="ribbon" id='home'>
 
             <div className='ribbonItem'>
               <p>SIGN INTO GOOGLE</p>
-              <img class='ribbonIcons' src={GoogleIcon} alt=' a google icon'></img>
+              <img className='ribbonIcons' src={GoogleIcon} alt=' a google icon'></img>
             </div>
 
             <div className='ribbonItem'>
                <p>VIEW ON MOBILE</p>
-               <img class='ribbonIcons' src={Mobile} alt='view on mobile'></img>
+               <img className='ribbonIcons' src={Mobile} alt='view on mobile'></img>
             </div>
 
             <div className='ribbonItem'>
               <p>YOUR INVENTORY TALKS</p>
-              <img class='ribbonIcons' src={Map} alt='your inventory talks'></img>
+              <img className='ribbonIcons' src={Map} alt='your inventory talks'></img>
              </div>
 
           </div>
@@ -143,19 +129,18 @@ export default class App extends Component {
          <h2 id="how">how it works</h2>
 
          <p className='boxContent'>
-           All databases are fundamentally spreadsheets used to store information.
-           Google sheets is a well known, free spreadsheet service which can be modified using
-           google apps script a programming language that only runs on google's cloud.
-
+           
            Pantree is an Express.js application programming interface that connects your google sheets data to your phone via your browser using the google sheets API and 
            a front end React.js web app (what you are seeing now).
-           Pantree allows you to store data and even lets you call functions on your data.
-
-           Additonally, Pantree writes google apps script for you that helps you track the freshness of your inventory items and let's you receive 
+           Pantree allows you to store and call functions on your data.
+           <br></br>
+           <br></br>
+           Additonally, Pantree <b>writes google apps script for you</b> that helps you track the freshness of your inventory items and let's you receive 
            real time alerts based on timers and GPS technology.
-
-           Now your entire inventory can be viewed and edited in a simple app allowing you to perform record keeping on the go!
-           GPS technology keeps track of where items were added. Pantree then sorts inventory by location allowing you to keep track
+          <br></br>
+          <br></br>
+           Now your entire inventory can be viewed and edited in a simple app allowing you to perform record keeping on the 
+           go! <b>GPS technology</b> keeps track of where items were added. Pantree then sorts inventory by location allowing you to keep track
            of multiple food storages simultaneously.
          </p>
        </div>
@@ -169,7 +154,7 @@ export default class App extends Component {
           </p>
        </div>
 
-       <div class='contactUs' id='contact'>
+       <div className='contactUs' id='contact'>
          <h2>Contact Us</h2>
 
          <p>
@@ -194,7 +179,7 @@ export default class App extends Component {
            with a flexible simplistic interface that anyone can adapt to.
            If you'd like to learn more about my other projects you can check out my github below.</p>
            <div>
-           <img class='me' src={Me} width='280px' height='250px' alt='a picture of luther the developer of Pantree'></img>
+           <img className='me' src={Me} width='280px' height='250px' alt='luther the developer of Pantree'></img>
            </div>
 
            </div>
@@ -213,35 +198,12 @@ export default class App extends Component {
         </div>
 
         <footer className='footer'></footer>
-
-        <Modal show={this.state.modal} >
-                        <Modal.Header closeButton>
-                          <Modal.Title>Modal title</Modal.Title>
-                        </Modal.Header>
-
-                              <Modal.Body>
-                                    <div className='sheetSelector'>{this.state.sheets.map((sheet)=>{
-                                        return(
-                                          <div key={sheet.id}>
-                                              <div onClick={()=>this.sheetSelected(sheet.name)}>{sheet.name}</div>
-                                            </div>
-                                        )
-                                    })}</div>
-                              </Modal.Body>
-
-                      <Modal.Footer>
-                            <Button onClick={()=>this.setState({modal:!this.state.modal})} variant="secondary">Close</Button>
-                            <Button onClick={()=>this.setState({modal:!this.state.modal})} variant="primary">Save changes</Button>
-                      </Modal.Footer>
-                  </Modal>
      </div>
-
-                  
 
       )
     } else{
       return(
-        <MobileInterface stock = {this.state.stock} storeHeader = {this.state.storeHeader}/>
+        <MobileInterface returnHome = {this.returnHome} data = {this.state.sheetData} stock = {this.state.stock} storeHeader = {this.state.storeHeader}/>
       )
     }
   }

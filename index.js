@@ -2,15 +2,17 @@ var express = require("express");
 const path = require('path');
 const creds = require('./client_secret');
 const app = express()
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const sheets = google.sheets('v4');
 
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'client/src')));
+//app.use(express.static(path.join(__dirname, 'client/src')));
 
 // An api endpoint that returns a short list of items
 app.get('/api/getList', (req,res) => {
@@ -20,40 +22,19 @@ app.get('/api/getList', (req,res) => {
 });
 
 
-
-
-/* SHEET OPERATIONS */
-app.get('/api/sheetData', (req,res) =>{
-    //grab the sheet data using the googlesheetsapi
-})
-
-app.post('/api/updateSheet', (req,res)=>{
-    //send new sheet data to the google sheet
-})
-
-// Handles any requests that don't match the ones above
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-app.listen(port,()=>{console.log(`listening on ${port}`)});
-
-
-
-
-
-
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'token.json';
 
+
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
-  authorize(JSON.parse(content), listPantry);
+  authorize(JSON.parse(content), grabSheetData);
 });
 
 /**
@@ -62,18 +43,45 @@ fs.readFile('client_secret.json', (err, content) => {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
-  const {client_secret, client_id, redirect_uris} = credentials.installed;
-  const oAuth2Client = new google.auth.OAuth2(
-      client_id, client_secret, redirect_uris[0]);
+function authorize(credentials) {
+  return new Promise(resolve => {  // Added
+    const { client_secret, client_id, redirect_uris } = credentials.installed;
+    const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
-  // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client);
+    // Check if we have previously stored a token.
+    fs.readFile(TOKEN_PATH, (err, token) => {
+      if (err) return getNewToken(oAuth2Client, e => resolve(e));  // Modified
+      oAuth2Client.setCredentials(JSON.parse(token));
+      resolve(oAuth2Client);  // Modified
+    });
   });
 }
+
+
+async function grabSheetData () {
+  var data = {
+    payload: ''
+  }
+  const authClient = await authorize(creds);  // Modified
+  const request = {
+    spreadsheetId: '1VTiTgPvMvLlOVBhBfoMGrshfMMJJMMzoA6GesheWMPg', 
+    range: 'A1:C',
+    valueRenderOption: "FORMATTED_VALUE",  // Modified
+    dateTimeRenderOption: "SERIAL_NUMBER",  // Modified 
+    auth: authClient, //this should be my token???
+  }
+
+  try {
+    const response = (await sheets.spreadsheets.values.get(request)).data;
+    // TODO: Change code below to process the `response` object:
+    console.log(JSON.stringify(response, null, 2));
+    data.payload=response
+  } catch (err) {
+    console.error(err);
+  }
+  return data
+};
+
 
 /**
  * Get and store new token after prompting for user authorization, and then
@@ -91,6 +99,7 @@ function getNewToken(oAuth2Client, callback) {
     input: process.stdin,
     output: process.stdout,
   });
+
   rl.question('Enter the code from that page here: ', (code) => {
     rl.close();
     oAuth2Client.getToken(code, (err, token) => {
@@ -106,27 +115,16 @@ function getNewToken(oAuth2Client, callback) {
   });
 }
 
-/**
- * Prints the names and majors of students in a sample spreadsheet:
- * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
- * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
- */
-function listPantry(auth) {
-  const sheets = google.sheets({version: 'v4', auth});
-  sheets.spreadsheets.values.get({
-    spreadsheetId: '1VTiTgPvMvLlOVBhBfoMGrshfMMJJMMzoA6GesheWMPg',
-    range: 'Class Data!A2:E',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      console.log('Name, Major:');
-      // Print columns A and E, which correspond to indices 0 and 4.
-      rows.map((row) => {
-        console.log(`${row[0]}, ${row[1]}, ${row[2]}`);
-      });
-    } else {
-      console.log('No data found.');
-    }
-  });
-}
+
+
+/* SHEET GET */
+app.get('/api/sheetData', async (req,res) =>{
+  const sheetData = await grabSheetData()
+  res.json(sheetData)
+})
+
+/* SHEET UPDATE */
+app.post('/api/updateSheet', (req,res)=>{
+    updateSheet(req.body);
+    console.log(req.body)
+});

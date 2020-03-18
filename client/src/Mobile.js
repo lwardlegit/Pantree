@@ -20,10 +20,11 @@ export default class Mobile extends Component {
                     
 
                 <body className = 'mBody'>
+                    <Button onClick={this.props.returnHome}>Return Home</Button>
                     {this.props.stock.map((collection,key)=>{
                         return(
-                            <div className={`mStoreItem ${collection.expiration}`} key={key}>
-                            <div>{collection.name} {collection.dateEntered} {collection.category} </div>
+                            <div className={`mStoreItem`} key={key}>
+                            <div>{collection[0]} {collection[1]} {collection[2]} </div>
                             <Button className='btn-circle' variant="danger">-</Button>
                             </div>
                         )
